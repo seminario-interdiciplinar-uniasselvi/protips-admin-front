@@ -50,8 +50,14 @@ const HandleContent = () => {
     };
 
     const handleContentBodyChange = (bodyHtml) => {
-        setContentData((prevData) => ({ ...prevData, bodyHtml }));
-    }
+        setContentData((prevData) => {
+            // Só atualiza se o conteúdo realmente mudou
+            if (prevData.bodyHtml !== bodyHtml) {
+                return { ...prevData, bodyHtml };
+            }
+            return prevData; // Não faz nada se o conteúdo for o mesmo
+        });
+    };
 
     return (
         <div className={styles.contentContainer}>

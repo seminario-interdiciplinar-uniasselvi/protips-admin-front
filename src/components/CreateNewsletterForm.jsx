@@ -1,9 +1,9 @@
-import {useState} from 'react';
+import React, {useState} from 'react';
 import api from '../services/api.js';
-import {Editor} from './Editor';
 import styles from '../styles/emailTemplateForm.module.css';
+import CronEditor from "./CronEditor.jsx";
 
-const EmailTemplateForm = () => {
+const CreateNewsletterForm = () => {
     const [template, setTemplate] = useState({
         title: '',
         description: '',
@@ -17,12 +17,15 @@ const EmailTemplateForm = () => {
         setTemplate((prevTemplate) => ({...prevTemplate, [name]: value}));
     };
 
+    const handleCronChange = (e) => {
+        setTemplate(prevState => ({...prevState, cron: e}));
+    };
     const handleSubmit = async (e) => {
         e.preventDefault();
         const userId = '6714131d00eb823fef45b03e';
         try {
             const response = await api.post(`/v1/users/${userId}/newsletters`, {...template});
-            setMessage('Template criado com sucesso!');
+            setMessage('Newsletter criado com sucesso!');
             setTemplate({
                 title: '',
                 description: '',
@@ -64,15 +67,17 @@ const EmailTemplateForm = () => {
                     />
                 </label>
                 <label className={styles.label}>
-                    Cron:
-                    <input
-                        type="text"
-                        name="cron"
-                        value={template.cron}
-                        onChange={handleInputChange}
-                        required
-                        className={styles.input}
-                    />
+                    Frequência:
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                    }}>
+                        <CronEditor
+
+                            setCron={handleCronChange}
+                        />
+
+                    </div>
                 </label>
                 <button className={styles.button} type="submit">Criar Newsletter</button>
             </form>
@@ -81,4 +86,4 @@ const EmailTemplateForm = () => {
     );
 };
 
-export default EmailTemplateForm;
+export default CreateNewsletterForm;
