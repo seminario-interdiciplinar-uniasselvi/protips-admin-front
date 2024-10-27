@@ -11,14 +11,13 @@ const HandleContent = () => {
     const navigate = useNavigate();
 
     const location = useLocation();
-    console.log(location)
 
     const isAddMode = location.state?.isAddMode ?? true;
     useEffect(() => {
         if (!isAddMode) {
             const fetchContent = async () => {
                 try {
-                    const response = await api.get(`/v1/users/${userId}/newsletters/${newsletterId}/content/${subject}`);
+                    const response = await api.get(`/v1/users/${userId}/newsletters/${newsletterId}/content/${encodeURIComponent(subject)}`);
                     const content = response.data;
                     setContentData(content);
                 } catch (error) {
@@ -40,7 +39,7 @@ const HandleContent = () => {
                 await api.post(`/v1/users/${userId}/newsletters/${newsletterId}/content`, contentData);
                 setMessage('Content added successfully');
             } else {
-                await api.put(`/v1/users/${userId}/newsletters/${newsletterId}/content/${subject}`, contentData);
+                await api.put(`/v1/users/${userId}/newsletters/${newsletterId}/content/${encodeURIComponent(subject)}`, contentData);
                 setMessage('Content updated successfully');
             }
             navigate(`/dashboard`);
@@ -51,11 +50,10 @@ const HandleContent = () => {
 
     const handleContentBodyChange = (bodyHtml) => {
         setContentData((prevData) => {
-            // Só atualiza se o conteúdo realmente mudou
             if (prevData.bodyHtml !== bodyHtml) {
                 return { ...prevData, bodyHtml };
             }
-            return prevData; // Não faz nada se o conteúdo for o mesmo
+            return prevData;
         });
     };
 

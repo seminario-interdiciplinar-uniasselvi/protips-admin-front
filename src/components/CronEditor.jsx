@@ -4,7 +4,6 @@ import Cron from "react-cron-generator";
 const CronEditor = ({setCron}) => {
     const handleCronChange = (newCron) => {
         setCron(newCron);
-        console.log(newCron);
     };
 
     return (
@@ -16,7 +15,6 @@ const CronEditor = ({setCron}) => {
             options={{
                 headers: ['DAILY', 'WEEKLY', 'MONTHLY'],
             }}
-            locale={'pt-BR'}
         />
     );
 };

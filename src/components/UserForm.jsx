@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import styles from '../styles/userForm.module.css';
 import api from "../services/api.js";
+import {Link, useNavigate} from "react-router-dom";
 
 const UserForm = () => {
     const [formData, setFormData] = useState({
@@ -8,7 +9,7 @@ const UserForm = () => {
     });
     const [message, setMessage] = useState('');
     const [success, setSuccess] = useState(false);
-
+    const navigate = useNavigate()
     const handleInputChange = (e) => {
         const {name, value} = e.target;
         setFormData({...formData, [name]: value});
@@ -21,7 +22,7 @@ const UserForm = () => {
             setMessage('Usuário criado com sucesso!');
             setSuccess(true);
             setFormData({name: '', email: ''});
-            // eslint-disable-next-line no-unused-vars
+            navigate('/login');
         } catch (error) {
             setMessage('Erro ao criar usuário!');
             setSuccess(false);
@@ -59,7 +60,8 @@ const UserForm = () => {
                             className={styles.input}
                         />
                     </label>
-                    <button type="submit" className={styles.button}>Enviar</button>
+                    <button type="submit" className={styles.button}>Criar</button>
+                    <Link to={'/login'}>Já tem uma conta? Faça login</Link>
                 </form>
                 {message && <p style={{color: success ? 'green' : 'red'}}>{message}</p>}
             </div>

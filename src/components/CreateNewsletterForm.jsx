@@ -1,7 +1,9 @@
-import React, {useState} from 'react';
+import {useEffect, useState} from 'react';
 import api from '../services/api.js';
 import styles from '../styles/emailTemplateForm.module.css';
 import CronEditor from "./CronEditor.jsx";
+import {useAuth} from "./AuthProvider.jsx";
+import {useNavigate} from "react-router-dom";
 
 const CreateNewsletterForm = () => {
     const [template, setTemplate] = useState({
@@ -11,7 +13,8 @@ const CreateNewsletterForm = () => {
     });
     const [message, setMessage] = useState('');
     const [success, setSuccess] = useState(false);
-
+    const {user} = useAuth();
+    const navigate = useNavigate();
     const handleInputChange = (e) => {
         const {name, value} = e.target;
         setTemplate((prevTemplate) => ({...prevTemplate, [name]: value}));
@@ -22,9 +25,8 @@ const CreateNewsletterForm = () => {
     };
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const userId = '6714131d00eb823fef45b03e';
         try {
-            const response = await api.post(`/v1/users/${userId}/newsletters`, {...template});
+            await api.post(`/v1/users/${user.id}/newsletters`, {...template});
             setMessage('Newsletter criado com sucesso!');
             setTemplate({
                 title: '',
@@ -32,6 +34,7 @@ const CreateNewsletterForm = () => {
                 cron: ''
             });
             setSuccess(true);
+            navigate('/dashboard');
         } catch (error) {
             const errorMsg = error.response?.data?.message || 'Erro ao criar o template!';
             setMessage(errorMsg);
@@ -39,7 +42,11 @@ const CreateNewsletterForm = () => {
         }
     };
 
-
+    useEffect(() => {
+        if (!user) {
+            return navigate('/login');
+        }
+    })
     return (
         <div className={styles.emailTemplateFormContainer}>
             <h2 className={styles.h2}>Criar Newsletter</h2>
