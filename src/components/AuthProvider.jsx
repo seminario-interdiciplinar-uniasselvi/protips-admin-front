@@ -1,4 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import Header from "./Header.jsx";
+import Footer from "./Footer.jsx";
 
 const AuthContext = createContext();
 
@@ -15,7 +17,9 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider value={{ authToken, setAuthToken, user, setUser }}>
+            <Header/>
             {children}
+            <Footer/>
         </AuthContext.Provider>
     );
 };

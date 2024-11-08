@@ -30,7 +30,7 @@ const UserForm = () => {
     };
 
     return (<div style={{
-            height: '100vh',
+            height: '86vh',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center'

@@ -1,16 +1,22 @@
 import { useState } from 'react';
 import api from '../services/api.js';
 import styles from '../styles/login.module.css';
+import StatusModal from "./StatusModal.jsx";
 const Login = () => {
     const [email, setEmail] = useState('');
-
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [modalMessage, setModalMessage] = useState('');
+    const [isSuccess, setIsSuccess] = useState(false);
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             await api.post(`/v1/auth/magic-link?email=${encodeURIComponent(email)}`);
-            alert('Email enviado!');
+            setModalMessage('Email enviado, confira seu email');
+            setIsSuccess(true);
+            setModalIsOpen(true);
         } catch (error) {
             console.error('Error sending magic link:', error);
+            setModalMessage('Erro ao enviar email');
         }
 
     };
@@ -18,6 +24,7 @@ const Login = () => {
     return (
         <div className={styles.container}>
             <form onSubmit={handleSubmit} className={styles.loginForm}>
+                <h1 style={{textAlign: 'center'}}>Login</h1>
                 <input
                     type="email"
                     value={email}
@@ -28,6 +35,12 @@ const Login = () => {
                 />
                 <button type="submit" className={styles.button}>Enviar</button>
             </form>
+            <StatusModal
+                isOpen={modalIsOpen}
+                onRequestClose={() => setModalIsOpen(false)}
+                message={modalMessage}
+                isSuccess={isSuccess}
+            />
         </div>
 
     );

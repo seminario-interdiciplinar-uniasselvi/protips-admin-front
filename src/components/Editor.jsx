@@ -6,7 +6,7 @@ export const Editor = ({setContent, initialContent}) => {
     let editorContent = initialContent;
     const config = {
         readonly: false,
-        height: 500,
+        height: 430,
         enableDragAndDropFileToEditor: true,
         "uploader": {
             "insertImageAsBase64URI": true

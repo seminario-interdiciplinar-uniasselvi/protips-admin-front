@@ -14,16 +14,21 @@ const ListContent = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const {user} = useAuth();
+
+
+    const fetchNewsletters = async (userId) => {
+        try {
+            const response = await api.get(`/v1/users/${userId}/newsletters`);
+            setNewsletter(response.data);
+            setLoading(false);
+        } catch (error) {
+            console.error('Error fetching newsletters:', error);
+        }
+    };
+
     useEffect(() => {
         if (user) {
-            api.get(`/v1/users/${user.id}/newsletters`)
-                .then(response => {
-                    setNewsletter(response.data);
-                    setLoading(false);
-                })
-                .catch(error => {
-                    console.error('Error fetching newsletters:', error);
-                });
+            fetchNewsletters(user.id);
         }
     }, [user]);
 
@@ -34,10 +39,10 @@ const ListContent = () => {
     const handleCronUpdate = async () => {
         try {
             await api.put(`/v1/users/${user.id}/newsletters/${newsletter.id}`, {cron: newCron});
-            setMessage('Cron updated successfully');
+            setMessage('Frequencia atualizada com sucesso!');
             setIsModalOpen(false);
         } catch (error) {
-            setMessage('Error updating cron');
+            setMessage('Erro ao atualizar frequencia');
         }
     };
 
@@ -55,6 +60,15 @@ const ListContent = () => {
     if (!newsletter) {
         return navigate('/create-newsletter');
     }
+
+    const handleContentDelete = async (subject) => {
+        try {
+            await api.delete(`/v1/users/${user.id}/newsletters/${newsletter.id}/content/${encodeURIComponent(subject)}`);
+            await fetchNewsletters(user.id);
+        } catch (error) {
+            setMessage('Erro ao deletar conteúdo');
+        }
+    };
 
     return (
         <div className={styles.listContentContainer}>
@@ -94,7 +108,9 @@ const ListContent = () => {
                 </div>}
             </div>
             <div className={styles.content}>
-                <div style={{display: 'flex', justifyContent: 'end'}}>
+                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                    <h3>Conteúdos</h3>
+
                     <Link
                         style={{
                             textDecoration: 'none',
@@ -112,19 +128,24 @@ const ListContent = () => {
                         Adicionar Conteúdo
                     </Link>
                 </div>
-                <h3>Conteúdos</h3>
                 {newsletter.contents.map((content, index) => (
                     <div key={index} className={styles.contentItem}>
                         <p><span>#{++index}</span> {content.subject}</p>
-                        <Link
-                            className={styles.button}
-                            to={{
-                                pathname: `/${user.id}/${newsletter.id}/${encodeURIComponent(content.subject)}`,
-                            }}
-                            state={{isAddMode: false}}
-                        >
-                            Editar
-                        </Link>
+                        <div>
+                            <Link
+                                className={styles.button}
+                                to={{
+                                    pathname: `/${user.id}/${newsletter.id}/${encodeURIComponent(content.subject)}`,
+                                }}
+                                state={{isAddMode: false}}
+                            >
+                                Editar
+                            </Link>
+                            <span
+                                className={styles.button}
+                                onClick={() => handleContentDelete(content.subject)}
+                            >X</span>
+                        </div>
                     </div>
                 ))}
             </div>

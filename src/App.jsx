@@ -9,6 +9,7 @@ import CronEditor from "./components/CronEditor.jsx";
 import Login from "./components/Login.jsx";
 import MagicLinkHandler from "./components/MagicLinkHandler.jsx";
 import {AuthProvider} from "./components/AuthProvider.jsx";
+import Header from "./components/Header.jsx";
 
 function App() {
     return (
