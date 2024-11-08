@@ -2,6 +2,7 @@ import { useState } from 'react';
 import api from '../services/api.js';
 import styles from '../styles/login.module.css';
 import StatusModal from "./StatusModal.jsx";
+import {Link} from "react-router-dom";
 const Login = () => {
     const [email, setEmail] = useState('');
     const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -34,6 +35,7 @@ const Login = () => {
                     className={styles.input}
                 />
                 <button type="submit" className={styles.button}>Enviar</button>
+                <Link  to={"/"}>Não tem uma conta? Criar</Link>
             </form>
             <StatusModal
                 isOpen={modalIsOpen}

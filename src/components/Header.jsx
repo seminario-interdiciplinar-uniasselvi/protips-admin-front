@@ -1,10 +1,14 @@
 import styles from '../styles/header.module.css';
-import {Link} from "react-router-dom";
+import {useAuth} from "./AuthProvider.jsx";
 
-const Header = () => {
+const Header = ({resetAuth}) => {
+    const {user} = useAuth();
+    const handleLogout = () => {
+        resetAuth();
+    };
     return (
         <header className={styles.header}>
-                <a
+            <a
                 style={{
                     textDecoration: 'none',
                     color: 'white',
@@ -12,8 +16,13 @@ const Header = () => {
                     fontWeight: 'bold',
                     padding: '10px',
                 }}
-                    href={'/dashboard'}
-                >ProTips</a>
+                href={'/dashboard'}
+            >ProTips</a>
+
+            {user && <button
+                className={styles.button}
+                onClick={handleLogout}
+            >Sair</button>}
         </header>
     );
 };

@@ -6,4 +6,15 @@
     position: sticky;
     top: 0;
     width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.button{
+    padding: 0 20px;
+    background-color: white;
+    color: #4CAF50;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }

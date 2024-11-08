@@ -79,7 +79,7 @@ const ListContent = () => {
             <p><strong>Status:</strong> {newsletter.active ? 'ATIVA' : 'INATIVA'}</p>
             <div className={styles.cron}>
                 <div>
-                    <strong>Cron:</strong>
+                    <strong>Frequência:</strong>
                     <button
                         onClick={() => setIsModalOpen(true)}
                         className={styles.button}

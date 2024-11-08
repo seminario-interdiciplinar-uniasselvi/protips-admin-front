@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, {createContext, useContext, useEffect, useState} from 'react';
 import Header from "./Header.jsx";
 import Footer from "./Footer.jsx";
 
@@ -15,9 +15,17 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('user', JSON.stringify(user));
     }, [user]);
 
+    const resetAuth = () => {
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('user');
+        setUser(null);
+        setAuthToken(null);
+        window.location.href = '/login';
+    };
+
     return (
         <AuthContext.Provider value={{ authToken, setAuthToken, user, setUser }}>
-            <Header/>
+            <Header resetAuth={resetAuth}/>
             {children}
             <Footer/>
         </AuthContext.Provider>
