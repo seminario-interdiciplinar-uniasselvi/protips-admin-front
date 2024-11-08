@@ -128,6 +128,15 @@ const ListContent = () => {
                         Adicionar Conteúdo
                     </Link>
                 </div>
+                {newsletter.contents.length === 0 && <p
+                    style={{
+                        color: "white",
+                        textAlign: "center",
+                        padding: '20px'
+                    }}
+                >
+                    Adicione Conteúdos Para Que Seus Assinantes Possam Ler!
+                </p>}
                 {newsletter.contents.map((content, index) => (
                     <div key={index} className={styles.contentItem}>
                         <p><span>#{++index}</span> {content.subject}</p>
